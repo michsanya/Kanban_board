@@ -9,6 +9,15 @@ class Kanban:
     __repr__ = __str__
 
 
+class Board_Field:
+    def __init__(self):
+        self.date = ...
+        # day shift (7:30-19:30) or night shift (19:30-7:30)
+        self.day_or_night = ...
+        # A,B,C or D
+        self.shift_name = ...
+
+
 class Board:
     def __init__(self, name):
         self.name = name
@@ -18,4 +27,3 @@ class Board:
 
     def create_kanban(self, text):
         self.tasks_list.append(Kanban("WO", text))
-
