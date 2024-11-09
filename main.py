@@ -16,4 +16,4 @@ def get_dates_list(date: datetime.datetime | None = None) -> list[datetime.datet
     return dates
 
 
-print(get_dates_list())
+#print(get_dates_list())
