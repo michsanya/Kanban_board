@@ -48,6 +48,14 @@ class Kanban:
         self.metadata["board"].in_work.append(self)
         self.metadata["board"].tasks_list.remove(self)
         self.metadata["started_date"] = start_date
+        # TODO to add kanban in datefield today or special date, and modify response type
+
+    def auto_move(self) -> None:
+        """
+        When time of updating has come kanban is moved to another field
+        :return: None
+        """
+        ...
 
 
 class Board_Field:
