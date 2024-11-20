@@ -1,5 +1,7 @@
 import datetime
 from enum import Enum
+from collections import namedtuple
+from logging import Logger
 
 
 def get_dates_list(date: datetime.datetime | None = None) -> list[datetime.datetime]:
@@ -33,12 +35,20 @@ class Kanban:
     def __init__(self, kanban_type, text):
         self.kanban_type = kanban_type
         self.text = text
+        self.metadata = {"creation_date":datetime.datetime.now()}
+        self.response = "Nobody" # Nobody, All, A, B, C, D, day, night
 
     def __str__(self):
         return str(self.text)
 
     __repr__ = __str__
 
+    def start(self, start_date:datetime.datetime = None):
+        start_date = datetime.datetime.now() if not start_date else start_date
+        self.metadata["board"].in_work.append(self)
+        self.metadata["board"].tasks_list.remove(self)
+        self.metadata ["started_date"] = start_date
+        
 
 class Board_Field:
     def __init__(self, date: datetime.datetime, is_morning: bool, shift_name: str):
@@ -59,15 +69,20 @@ class Board:
 
     def __init__(self, name):
         self.name = name
-        # self.date_field = [Board_Field(x, True, "Z") for x in get_dates_list()]
+        self.in_work = []
+        self.tasks_list = []
+        self.completed = []
         self.date_field = []
         for x in get_dates_list():
             self.date_field.append(Board_Field(x, True, n := get_day_shift_name(x, Board.first_shift_of_first_shift)))
             self.date_field.append(Board_Field(x, False, get_night_shift_name(n)))
 
-        self.in_work = []
-        self.tasks_list = []
-        self.completed = []
-
     def create_kanban(self, text):
-        self.tasks_list.append(Kanban("WO", text))
+        kanban = Kanban("WO", text)
+        kanban.metadata["board"] = self
+        self.tasks_list.append(kanban)
+        return kanban
+
+    def get_kanbans(self)->list[Kanban]:
+        return self.tasks_list+self.in_work+self.completed
+        
