@@ -35,20 +35,20 @@ class Kanban:
     def __init__(self, kanban_type, text):
         self.kanban_type = kanban_type
         self.text = text
-        self.metadata = {"creation_date":datetime.datetime.now()}
-        self.response = "Nobody" # Nobody, All, A, B, C, D, day, night
+        self.metadata = {"creation_date": datetime.datetime.now()}
+        self.response = "Nobody"  # Nobody, All, A, B, C, D, day, night
 
     def __str__(self):
         return str(self.text)
 
     __repr__ = __str__
 
-    def start(self, start_date:datetime.datetime = None):
+    def start(self, start_date: datetime.datetime = None):
         start_date = datetime.datetime.now() if not start_date else start_date
         self.metadata["board"].in_work.append(self)
         self.metadata["board"].tasks_list.remove(self)
-        self.metadata ["started_date"] = start_date
-        
+        self.metadata["started_date"] = start_date
+
 
 class Board_Field:
     def __init__(self, date: datetime.datetime, is_morning: bool, shift_name: str):
@@ -83,6 +83,5 @@ class Board:
         self.tasks_list.append(kanban)
         return kanban
 
-    def get_kanbans(self)->list[Kanban]:
-        return self.tasks_list+self.in_work+self.completed
-        
+    def get_kanbans(self) -> list[Kanban]:
+        return self.tasks_list + self.in_work + self.completed
