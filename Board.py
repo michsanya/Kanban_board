@@ -1,7 +1,8 @@
-import datetime, time
+import datetime
+import time
 
-from kanban import Kanban
 from Board_field import BoardField
+from kanban import Kanban
 
 current_week_num = time.strftime("%U", time.gmtime())
 next_week_num = time.strftime("%U", time.gmtime(time.time() + 7 * 24 * 60 * 60))
@@ -30,7 +31,7 @@ def get_night_shift_name(day_shift: str,
     names_dict = {"A": "C",
                   "B": "D",
                   "C": "A",
-                  "D": "B"}
+                  "D": "B"} if not names else names
     return names_dict[day_shift]
 
 

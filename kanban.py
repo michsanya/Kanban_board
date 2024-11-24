@@ -19,7 +19,7 @@ class Kanban:
         self.metadata["board"].in_work.append(self)
         self.metadata["board"].tasks_list.remove(self)
         self.metadata["started_date"] = start_date
-        # TODO to add kanban in datefield today or special date, and modify response type
+        # TODO modify response type
         for shift in self.metadata["board"].date_field:
             if shift.start < start_date < shift.end:
                 shift.kanbans.append(self)

@@ -1,5 +1,6 @@
 import datetime
 
+
 class BoardField:
     def __init__(self, date: datetime.datetime, is_morning: bool, shift_name: str):
         self.is_morning = is_morning
