@@ -1,12 +1,9 @@
 import datetime
-import time
-from kanban import Board, get_day_shift_name
-
-current_week_num = time.strftime("%U", time.gmtime())
-next_week_num = time.strftime("%U", time.gmtime(time.time() + 7 * 24 * 60 * 60))
+from Board import Board
 
 b = Board("Test_board")
 
 k1 = b.create_kanban("My kanban")
 
-# k1.start()
+k1.start(datetime.datetime(year=2024, month=11, day=25, hour=20))
+print(b)
