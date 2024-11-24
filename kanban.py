@@ -85,6 +85,9 @@ class Board:
             self.date_field.append(Board_Field(x, True, n := get_day_shift_name(x, Board.first_shift_of_first_shift)))
             self.date_field.append(Board_Field(x, False, get_night_shift_name(n)))
 
+    def __str__(self):
+        return f"* {self.name} *\nNot started: {self.tasks_list}\nIn work: {self.in_work}\nCompleted: {self.completed}"
+
     def create_kanban(self, text):
         kanban = Kanban("WO", text)
         kanban.metadata["board"] = self
