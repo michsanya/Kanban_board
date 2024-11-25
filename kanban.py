@@ -24,13 +24,12 @@ class Kanban:
             if shift.start < start_date < shift.end:
                 shift.kanbans.append(self)
 
-    def auto_move(self) -> None:
-        """
-        When time of updating has come kanban is moved to another field
-        :return: None
-        """
-        ...
-
-
-
+    def finish(self, finish_date: datetime.datetime = None):
+        finish_date = datetime.datetime.now() if not finish_date else finish_date
+        self.metadata["board"].completed.append(self)
+        self.metadata["board"].in_work.remove(self)
+        self.metadata["finish_date"] = finish_date
+        for shift in self.metadata["board"].date_field:
+            if self in shift.kanbans:
+                shift.kanbans.remove(self)
 

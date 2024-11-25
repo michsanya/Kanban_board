@@ -38,6 +38,13 @@ def get_night_shift_name(day_shift: str,
 class Board:
     first_shift_of_first_shift = datetime.datetime(2024, 1, 2)
 
+    def check_expire(self):
+        now = datetime.datetime.now()
+        for num, shift in enumerate(self.date_field):
+            if shift.kanbans and shift.end < now:
+                self.date_field[num + 1].kanbans.extend(shift.kanbans)
+                shift.kanbans.clear()
+
     def __init__(self, name):
         self.name = name
         self.in_work = []
@@ -59,3 +66,4 @@ class Board:
 
     def get_kanbans(self) -> list[Kanban]:
         return self.tasks_list + self.in_work + self.completed
+
