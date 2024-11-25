@@ -14,7 +14,7 @@ class BoardField:
         self.kanbans = []
 
     def __str__(self):
-        return f"{self.start.strftime('%d.%m %H:%M')}, {self.shift_name}"
+        return f"{self.start.strftime('%d.%m %H:%M')}, {self.shift_name}, {len(self.kanbans)}"
 
     __repr__ = __str__
 

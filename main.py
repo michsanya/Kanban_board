@@ -3,6 +3,7 @@ from Board import Board
 
 b = Board("Test_board")
 
-k1 = b.create_kanban("My kanban")
+# for i in range(10):
+#     b.create_kanban(f"My kanban {i}")
 
-k1.start(datetime.datetime(year=2024, month=11, day=25, hour=20))
+# start(datetime.datetime(year=2024, month=11, day=25, hour=20))
