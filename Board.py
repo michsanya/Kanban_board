@@ -42,8 +42,8 @@ class Board:
         now = datetime.datetime.now()
         for num, shift in enumerate(self.date_field):
             if shift.kanbans and shift.end < now:
-                self.date_field[num + 1].kanbans.extend(shift.kanbans)
-                shift.kanbans.clear()
+                for kanban in  shift.kanbans:
+                    kanban.move(self.date_field[num+1])
 
     def __init__(self, name):
         self.name = name
@@ -61,9 +61,9 @@ class Board:
     def create_kanban(self, text):
         kanban = Kanban("WO", text)
         kanban.metadata["board"] = self
+        kanban.metadata["location"] = self.tasks_list
         self.tasks_list.append(kanban)
         return kanban
 
     def get_kanbans(self) -> list[Kanban]:
         return self.tasks_list + self.in_work + self.completed
-

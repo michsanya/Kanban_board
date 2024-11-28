@@ -1,6 +1,8 @@
 import datetime
 from logging import Logger
 
+from Board_field import BoardField
+
 
 class Kanban:
     def __init__(self, kanban_type, text):
@@ -23,13 +25,27 @@ class Kanban:
         for shift in self.metadata["board"].date_field:
             if shift.start < start_date < shift.end:
                 shift.kanbans.append(self)
+                self.metadata["location"] = shift
 
     def finish(self, finish_date: datetime.datetime = None):
         finish_date = datetime.datetime.now() if not finish_date else finish_date
         self.metadata["board"].completed.append(self)
         self.metadata["board"].in_work.remove(self)
         self.metadata["finish_date"] = finish_date
+        self.metadata["location"] = self.metadata["board"].completed
         for shift in self.metadata["board"].date_field:
             if self in shift.kanbans:
                 shift.kanbans.remove(self)
 
+    def move(self, dist_board_field):
+        if type(self.metadata["location"]) is BoardField:
+            self.metadata["location"].kanbans.remove(self)
+            self.metadata["board"].in_work.remove(self)
+        else:
+            self.metadata["location"].remove(self)
+        if type(dist_board_field) is BoardField:
+            dist_board_field.kanbans.append(self)
+            self.metadata["board"].in_work.append(self)
+        else:
+            dist_board_field.append(self)
+        self.metadata["location"] = dist_board_field
