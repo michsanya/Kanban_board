@@ -12,3 +12,6 @@ b.tasks_list[2].start(datetime.datetime(year=2024, month=11, day=25, hour=11, mi
 k = b.tasks_list[2]
 k.start()
 k.move(b.completed)
+print(b.date_field)
+b.check_expire()
+print(b.date_field)

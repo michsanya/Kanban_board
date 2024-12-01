@@ -19,4 +19,9 @@ class BoardField:
     __repr__ = __str__
 
     def add(self, kanban):
+        """
+        add kanban in list kanbans
+        :param kanban:
+        :return:
+        """
         self.kanbans.append(kanban)

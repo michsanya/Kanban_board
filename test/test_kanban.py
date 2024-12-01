@@ -29,3 +29,13 @@ class TestKanban(TestCase):
         print(f"{b.completed=}")
         print(f"{b.completed[0].metadata=}")
         self.fail()
+
+
+class TestKanban(TestCase):
+    def test_start(self):
+        self.fail()
+
+
+class TestKanban(TestCase):
+    def test_move(self):
+        self.fail()

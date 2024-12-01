@@ -17,6 +17,11 @@ class Kanban:
     __repr__ = __str__
 
     def start(self, start_date: datetime.datetime = None):
+        """
+        Start kanban from Tasks List. Put its in In Work, and in current DateField
+        :param start_date:
+        :return:
+        """
         start_date = datetime.datetime.now() if not start_date else start_date
         self.metadata["board"].in_work.append(self)
         self.metadata["board"].tasks_list.remove(self)
@@ -28,6 +33,11 @@ class Kanban:
                 self.metadata["location"] = shift
 
     def finish(self, finish_date: datetime.datetime = None):
+        """
+        Finish kanban. Move it from In work and Datefield to Completed
+        :param finish_date:
+        :return:
+        """
         finish_date = datetime.datetime.now() if not finish_date else finish_date
         self.metadata["board"].completed.append(self)
         self.metadata["board"].in_work.remove(self)
@@ -38,6 +48,11 @@ class Kanban:
                 shift.kanbans.remove(self)
 
     def move(self, dist_board_field):
+        """
+        Move kanban from datefield to other datefield or completed
+        :param dist_board_field:
+        :return:
+        """
         if type(self.metadata["location"]) is BoardField:
             self.metadata["location"].kanbans.remove(self)
             self.metadata["board"].in_work.remove(self)

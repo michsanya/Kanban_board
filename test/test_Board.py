@@ -15,3 +15,8 @@ class Test(TestCase):
 
     def test_get_night_shift_name(self):
         self.fail()
+
+
+class TestBoard(TestCase):
+    def test_create_kanban(self):
+        self.fail()
