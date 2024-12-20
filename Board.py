@@ -68,6 +68,39 @@ class Board:
                 for kanban in  shift.kanbans:
                     kanban.move(self.date_field[num+1])
 
+    def check_responsibility(self):
+        """
+        Проверка доски на соответствие ответствееости канбана и смены
+        """
+        for num, shift in enumerate(self.date_field[:-1]):
+            if shift.kanbans:
+                for kanban in shift.kanbans:
+                    if kanban.response == "Nobody":
+                        continue
+                    
+                    if kanban.response == "All":
+                        if shift.shift_name in "ABCD":
+                            continue
+                        else:
+                            kanban.move(self.date_field[num+1])
+                    
+                    if any(("A" in kanban.response,"B" in kanban.response,"C" in kanban.response,"D" in kanban.response)):
+                        if kanban.response == shift.shift_name:
+                            continue
+                        else:
+                            kanban.move(self.date_field[num+1])
+
+                    if ((kanban.response == "day") or (kanban.response == "night")):
+                        if shift.is_morning and kanban.response == "day":
+                            continue
+                        else:
+                            kanban.move(self.date_field[num+1])
+                        if kanban.response == "night" and not shift.is_morning:
+                            continue
+                        else:
+                            kanban.move(self.date_field[num+1])
+
+
     def __init__(self, name):
         self.name = name
         self.in_work = []

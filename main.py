@@ -6,12 +6,15 @@ b = Board("Test_board")
 for i in range(10):
     b.create_kanban(f"My kanban {i}")
 
-b.tasks_list[4].start()
-b.tasks_list[2].start()
-b.tasks_list[2].start(datetime.datetime(year=2024, month=11, day=25, hour=11, minute=00))
+b.tasks_list[4].start(response="B")
+b.tasks_list[2].start(response="day")
+#TODO Перепрыгивает через один канбана, так как предыдущий перемещается
+b.tasks_list[2].start(datetime.datetime(year=2024, month=12, day=19, hour=11, minute=00))
 k = b.tasks_list[2]
 k.start()
 k.move(b.completed)
-print(b.date_field)
+print(*b.date_field, sep='\n', end = '\n\n*********************             \n')
 b.check_expire()
-print(b.date_field)
+print(*b.date_field, sep='\n', end = '\n\n*********************             \n')
+b.check_responsibility()
+print(*b.date_field, sep='\n', end = '\n\n*********************             \n')

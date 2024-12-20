@@ -16,13 +16,14 @@ class Kanban:
 
     __repr__ = __str__
 
-    def start(self, start_date: datetime.datetime = None):
+    def start(self, start_date: datetime.datetime = None, response = "All"):
         """
         Start kanban from Tasks List. Put its in In Work, and in current DateField
         :param start_date:
         :return:
         """
         start_date = datetime.datetime.now() if not start_date else start_date
+        self.response = response
         self.metadata["board"].in_work.append(self)
         self.metadata["board"].tasks_list.remove(self)
         self.metadata["started_date"] = start_date
