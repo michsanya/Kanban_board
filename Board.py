@@ -4,8 +4,8 @@ import time
 from Board_field import BoardField
 from kanban import Kanban
 
-current_week_num = time.strftime("%U", time.gmtime())
-next_week_num = time.strftime("%U", time.gmtime(time.time() + 7 * 24 * 60 * 60))
+current_week_num:str = time.strftime("%U", time.gmtime())
+next_week_num:str = time.strftime("%U", time.gmtime(time.time() + 7 * 24 * 60 * 60))
 
 
 def get_dates_list(date: datetime.datetime | None = None) -> list[datetime.datetime]:
@@ -14,9 +14,9 @@ def get_dates_list(date: datetime.datetime | None = None) -> list[datetime.datet
     :param date: date for creating table
     :return: list of 14 date from Monday. Date from param is in first week
     """
-    date_now = date if date else datetime.datetime.now()
-    first_date = date_now - datetime.timedelta(days=date_now.weekday())
-    dates = [first_date + datetime.timedelta(days=x) for x in range(14)]
+    date_now:datetime.datetime = date if date else datetime.datetime.now()
+    first_date:datetime.datetime = date_now - datetime.timedelta(days=date_now.weekday())
+    dates:list[datetime.datetime] = [first_date + datetime.timedelta(days=x) for x in range(14)]
     return dates
 
 
@@ -31,9 +31,9 @@ def get_day_shift_name(date: datetime.datetime,
     :param names: cycle of names
     :return: shift name
     """
-    names = names if names else ["A", "A", "B", "B", "C", "C", "D", "D"]
-    num_of_day = date.timetuple().tm_yday
-    delta = first_shift_of_first_shift.timetuple().tm_yday
+    names:list[str] = names if names else ["A", "A", "B", "B", "C", "C", "D", "D"]
+    num_of_day:int = date.timetuple().tm_yday
+    delta:int = first_shift_of_first_shift.timetuple().tm_yday
     return names[(num_of_day - delta) % len(names)]
 
 
@@ -46,7 +46,7 @@ def get_night_shift_name(day_shift: str,
     :param names: dict Morning - Night
     :return: name of night shift
     """
-    names_dict = {"A": "C",
+    names_dict:dict[str, str] = {"A": "C",
                   "B": "D",
                   "C": "A",
                   "D": "B"} if not names else names
@@ -54,7 +54,7 @@ def get_night_shift_name(day_shift: str,
 
 
 class Board:
-    first_shift_of_first_shift = datetime.datetime(2024, 1, 2)
+    first_shift_of_first_shift:datetime.datetime = datetime.datetime(2024, 1, 2)
 
     def check_expire(self):
         """
@@ -62,20 +62,21 @@ class Board:
         Если находится такой канбан - он передвигается на текущую дату
         :return:
         """
-        now = datetime.datetime.now()
+        now:datetime.datetime = datetime.datetime.now()
         for num, shift in enumerate(self.date_field):
             if shift.kanbans and shift.end < now:
-                for kanban in  shift.kanbans:
+                for kanban in  shift.kanbans.copy():
                     kanban.move(self.date_field[num+1])
 
     def check_responsibility(self):
         """
-        Проверка доски на соответствие ответствееости канбана и смены
+        Проверка доски на соответствие ответственнеости канбана и смены
         """
         for num, shift in enumerate(self.date_field[:-1]):
             if shift.kanbans:
-                for kanban in shift.kanbans:
-                    if kanban.response == "Nobody":
+                for kanban in shift.kanbans.copy():
+                    splitted_response = kanban.response.split()
+                    if "Nobody" in splitted_response:
                         continue
                     
                     if kanban.response == "All":
@@ -84,29 +85,27 @@ class Board:
                         else:
                             kanban.move(self.date_field[num+1])
                     
-                    if any(("A" in kanban.response,"B" in kanban.response,"C" in kanban.response,"D" in kanban.response)):
-                        if kanban.response == shift.shift_name:
-                            continue
-                        else:
+                    if any(("A" in splitted_response,"B" in splitted_response,"C" in splitted_response,"D" in splitted_response)):
+                        if shift.shift_name not in splitted_response:
                             kanban.move(self.date_field[num+1])
 
-                    if ((kanban.response == "day") or (kanban.response == "night")):
-                        if shift.is_morning and kanban.response == "day":
+                    if (("day" in splitted_response) or ("night" in splitted_response)):
+                        if shift.is_morning and "day" in splitted_response:
                             continue
-                        else:
-                            kanban.move(self.date_field[num+1])
-                        if kanban.response == "night" and not shift.is_morning:
+                        # else:
+                        #     kanban.move(self.date_field[num+1])
+                        if "night" in splitted_response and not shift.is_morning:
                             continue
                         else:
                             kanban.move(self.date_field[num+1])
 
 
     def __init__(self, name):
-        self.name = name
-        self.in_work = []
-        self.tasks_list = []
-        self.completed = []
-        self.date_field = []
+        self.name:str = name
+        self.in_work:list[None|Kanban] = []
+        self.tasks_list:list[None|Kanban] = []
+        self.completed:list[None|Kanban] = []
+        self.date_field:list[None|BoardField] = []
         for x in get_dates_list():
             self.date_field.append(BoardField(x, True, n := get_day_shift_name(x, Board.first_shift_of_first_shift)))
             self.date_field.append(BoardField(x, False, get_night_shift_name(n)))
@@ -120,7 +119,7 @@ class Board:
         :param text:
         :return: kanban
         """
-        kanban = Kanban("WO", text)
+        kanban:Kanban = Kanban("WO", text)
         kanban.metadata["board"] = self
         kanban.metadata["location"] = self.tasks_list
         self.tasks_list.append(kanban)
