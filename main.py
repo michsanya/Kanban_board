@@ -9,7 +9,7 @@ for i in range(10):
 b.tasks_list[4].start(response="D")
 b.tasks_list[2].start(response="A night")
 #TODO Перепрыгивает через один канбана, так как предыдущий перемещается
-b.tasks_list[2].start(datetime.datetime(year=2024, month=12, day=19, hour=11, minute=00))
+b.tasks_list[2].start(datetime.datetime(year=2024, month=12, day=25, hour=11, minute=00))
 k = b.tasks_list[2]
 k.start()
 k.move(b.completed)
